@@ -90,6 +90,7 @@ export function Home({ navigation }: any) {
                             <MealStatus status={item.status} />
                         </Meal>
                     )}
+                    showsVerticalScrollIndicator={false}
                     renderSectionHeader={({ section: { title } }) => <MealTitle>{title}</MealTitle>}
                     contentContainerStyle={{ gap: 8, paddingBottom: 30 }}
                 />
