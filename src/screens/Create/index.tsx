@@ -6,7 +6,12 @@ import { Label } from '@components/Input/styles'
 import { Select } from '@components/Select'
 import { Button } from '@components/Button'
 
-export function Create({ navigation }: { navigation: any }) {
+export function Create({ navigation }: { navigation: any}) {
+
+    function handlePress() {
+        navigation.navigate('Feedback', { inDiet: false })
+    }
+
     return (
         <Container>
             <BackToHomeButton onPress={() => navigation.navigate('Home')}>
@@ -35,7 +40,7 @@ export function Create({ navigation }: { navigation: any }) {
                         <Select label="Não" status='DANGER' isActive={false}/>
                     </View>
                 </View>
-                <Button label="Cadastrar refeição" onPress={() => {}} style={{ marginTop: 70 }} />
+                <Button label="Cadastrar refeição" onPress={handlePress} style={{ marginTop: 70 }} />
             </CreatingContainer>
         </Container>
     )
