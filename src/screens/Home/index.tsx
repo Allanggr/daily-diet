@@ -78,7 +78,7 @@ export function Home({ navigation }: any) {
             </PercentageContainer>
             <MealsContainer>
                 <Title>Refeições</Title>
-                <Button icon="add" label="Nova refeição" />
+                <Button icon="add" label="Nova refeição" onPress={() => navigation.navigate('Create')} />
                 <SectionList
                     fadingEdgeLength={350}
                     sections={data}

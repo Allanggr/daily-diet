@@ -1,13 +1,16 @@
 
-import { Container, Description, OpenStatisticsIcon, Percentage, PercentageContainer, StatisticsContainer, StatisticsSquare, StatisticsSquareDescription, StatistisSquareTitle, Title } from './styles'
+import { Container, Description, BackToHomeIcon, BackToHomeButton, Percentage, PercentageContainer, StatisticsContainer, StatisticsSquare, 
+    StatisticsSquareDescription, StatistisSquareTitle, Title } from './styles'
 import { View } from 'react-native'
 
 
 export function Statistics({ navigation }: { navigation: any }) {
     return (
         <Container status={'SUCCESS'}>
-            <PercentageContainer status={'SUCCESS'} onPress={() => navigation.navigate('Home')}>
-                <OpenStatisticsIcon status={'SUCCESS'} />
+            <BackToHomeButton onPress={() => navigation.navigate('Home')}>
+                <BackToHomeIcon status={'SUCCESS'} />
+            </BackToHomeButton>
+            <PercentageContainer status={'SUCCESS'}>
                 <Percentage>90,86%</Percentage>
                 <Description>das refeições dentro da dieta</Description>
             </PercentageContainer>

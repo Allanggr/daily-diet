@@ -23,9 +23,8 @@ export const StatisticsContainer = styled.View`
   padding: 40px 20px 25px 20px;
 `
 
-export const PercentageContainer = styled(TouchableOpacity)<StatusProp>`
-    margin-top: 20px;
-    padding: 20px 16px 25px 16px;
+export const PercentageContainer = styled(View)<StatusProp>`
+    padding: 20px 16px 30px 16px;
     border-radius: 8px;
     background-color: ${({ theme, status }) => status === 'SUCCESS' ? theme.COLORS.GREEN_LIGHT : theme.COLORS.RED_LIGHT};
 `
@@ -48,13 +47,18 @@ export const Description = styled.Text`
     text-align: center;
 `
 
-export const OpenStatisticsIcon = styled(ArrowLeft).attrs<StatusProp>(({ theme, status }) => ({
+export const BackToHomeIcon = styled(ArrowLeft).attrs<StatusProp>(({ theme, status }) => ({
     size: 24,
     color: status === 'SUCCESS' ? theme.COLORS.GREEN_DARK : theme.COLORS.RED_DARK
 }))`
-    position: absolute;
-    left: 20px;
-    top: 10px;
+`
+export const BackToHomeButton = styled(TouchableOpacity)`
+    left: 10px;
+    top: 30px;
+    z-index: 999;
+    padding: 10px;
+    max-width: 24px;
+    max-height: 24px;
 `
 
 export const Title = styled.Text`
