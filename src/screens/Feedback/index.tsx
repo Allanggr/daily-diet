@@ -23,7 +23,7 @@ export function Feedback({ navigation, route }: any) {
             <Title status={inDiet}>{feedbackData.title}</Title>
             <Description>{feedbackData.message}</Description>
             <Image source={feedbackData.imagem} />
-            <Button label="Ir para a página inicial" onPress={() => navigation.navigate('Home')} />
+            <Button label="Ir para a página inicial" onPress={() => navigation.push('Home')} />
         </Container>
     );
 }

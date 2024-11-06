@@ -109,3 +109,14 @@ export const OpenStatisticsIcon = styled(ArrowUpRight).attrs<StatusProp>(({ them
     right: 10px;
     top: 10px;
 `
+
+export const EmptyListComponent = styled.Text`
+  ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.MD}px;
+    color: ${theme.COLORS.GRAY_3};
+  `};
+
+  margin-top: 20px;
+  text-align: center;
+  font-style: italic;
+`;

@@ -8,6 +8,7 @@ type Props = {
 
 export const Container = styled(TouchableOpacity)<Props>`
     background-color: ${({ theme, outline }) => outline ? 'transparent' : theme.COLORS.GRAY_2};
+    border: 1px solid ${({ theme }) => theme.COLORS.GRAY_1};
     color: 'red';
     padding: 16px;
     border-radius: 8px;

@@ -1,4 +1,4 @@
-import { Text, TouchableOpacityProps } from "react-native";
+import { TouchableOpacityProps } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BtnIcon, BtnLabel, Container } from "./styles";
 

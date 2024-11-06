@@ -9,6 +9,7 @@
       "@theme/*": ["./src/theme/*"],
       "@assets/*": ["./assets/*"],
       "@storage/*": ["./src/storage/*"],
+      "@utils/*": ["./src/utils/*"],
     }
   }
 }

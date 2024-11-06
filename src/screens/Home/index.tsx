@@ -1,100 +1,81 @@
 import { Header } from '@components/Header'
-import { Container, Description, Meal, MealHour, MealName, MealsContainer, MealStatus, MealTitle, 
-    OpenStatisticsIcon, Percentage, PercentageContainer, StatusProp, Title } from './styles'
+import { Container, Description, EmptyListComponent, Meal, MealHour, MealName, MealsContainer, MealStatus, MealTitle, 
+    OpenStatisticsIcon, Percentage, PercentageContainer, Title } from './styles'
 import { Button } from '@components/Button'
-import { SectionList } from 'react-native'
-import { useState } from 'react'
+import { Alert, SectionList } from 'react-native'
+import { useEffect, useState } from 'react'
+import { getAllMeals } from '@storage/meal/getAllMeals'
+import { getStats, StatsProps } from '@utils/getStats'
+import { MealGroup } from '@storage/storage.config'
+import { Loading } from '@components/Loading'
+import React from 'react'
 
 
 export function Home({ navigation }: any) {
-    const [data, setData] = useState([
-        {
-            title: '26.09.24',
-            data: [
-                {
-                    id: 1,
-                    name: 'Vitamina de banana com aveia e whey',
-                    date: '2024-09-26T08:00:00.752-03:00',
-                    description: 'Café da manhã',
-                    status: 'SUCCESS' as StatusProp['status']
-                },
-                {
-                    id: 2,
-                    name: 'Almoço',
-                    date: '2024-09-26T12:00:00.752-03:00',
-                    description: 'Almoço',
-                    status: 'SUCCESS' as StatusProp['status']
-                },
-                {
-                    id: 3,
-                    name: 'Bolinho',
-                    date: '2024-09-26T16:00:00.752-03:00',
-                    description: 'Bolinho de chuva',
-                    status: 'DANGER' as StatusProp['status']
-                },
-                {
-                    id: 4,
-                    name: 'Jantar',
-                    date: '2024-09-26T20:00:00.752-03:00',
-                    description: 'Jantar',
-                    status: 'SUCCESS' as StatusProp['status']
-                }
-            ]
-        }, 
-        {
-            title: '26.09.25',
-            data: [
-                {
-                    id: 4,
-                    name: 'Vitamina de banana com aveia e whey',
-                    date: '2024-09-26T08:00:00.752-03:00',
-                    description: 'Café da manhã',
-                    status: 'SUCCESS' as StatusProp['status']
-                },
-                {
-                    id: 5,
-                    name: 'Almoço',
-                    date: '2024-09-26T12:00:00.752-03:00',
-                    description: 'Almoço',
-                    status: 'SUCCESS' as StatusProp['status']
-                },
-                {
-                    id: 6,
-                    name: 'Bolinho',
-                    date: '2024-09-26T16:00:00.752-03:00',
-                    description: 'Bolinho de chuva',
-                    status: 'DANGER' as StatusProp['status']
-                }
-            ]
+    const [data, setData] = useState<MealGroup[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [stats, setStats] = useState<StatsProps>({
+        numberOfMeals: 0,
+        isDietPositive: false,
+        numberOfMealsOutDiet: 0,
+        percentageOfMealsInDiet: '',
+        bestSequenceOfMealsInDiet: 0
+    })
+
+    const fetchMealGroups = async () => {
+        try {
+            setIsLoading(true);
+            const data = await getAllMeals();
+            const lastStats = await getStats();
+            setData(data);
+            setStats(lastStats);
+        } catch (error) {
+          Alert.alert("Refeições", "Não foi possível carregar as refeições!");
+        } finally {
+          setIsLoading(false);
         }
-    ])
+      };
+
+    useEffect(() => {
+        fetchMealGroups();
+    }, []);
+
     return (
         <Container>
             <Header />
-            <PercentageContainer status={'SUCCESS'} onPress={() => navigation.navigate('Statistics')}>
-                <OpenStatisticsIcon status={'SUCCESS'} />
-                <Percentage>90,86%</Percentage>
-                <Description>das refeições dentro da dieta</Description>
-            </PercentageContainer>
-            <MealsContainer>
-                <Title>Refeições</Title>
-                <Button icon="add" label="Nova refeição" onPress={() => navigation.navigate('Create')} />
-                <SectionList
-                    fadingEdgeLength={350}
-                    sections={data}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <Meal>
-                            <MealHour>20:00</MealHour>
-                            <MealName>{item.name}</MealName>
-                            <MealStatus status={item.status} />
-                        </Meal>
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    renderSectionHeader={({ section: { title } }) => <MealTitle>{title}</MealTitle>}
-                    contentContainerStyle={{ gap: 8, paddingBottom: 30 }}
-                />
-            </MealsContainer>
+            {isLoading && !data.length ? <Loading /> :
+            <>
+                <PercentageContainer status={stats.isDietPositive ? 'SUCCESS' : 'DANGER'} onPress={() => navigation.navigate('Statistics')}>
+                    <OpenStatisticsIcon status={stats.isDietPositive ? 'SUCCESS' : 'DANGER'} />
+                    <Percentage>{ `${stats.percentageOfMealsInDiet}%` }</Percentage>
+                    <Description>das refeições dentro da dieta</Description>
+                </PercentageContainer>
+                <MealsContainer>
+                    <Title>Refeições</Title>
+                    <Button icon="add" label="Nova refeição" onPress={() => navigation.navigate('Create')} />
+                    <SectionList
+                        fadingEdgeLength={350}
+                        sections={data}
+                        keyExtractor={(item) => item.id.toString()}
+                        ListEmptyComponent={() => (
+                            <EmptyListComponent>
+                            Você ainda não cadastrou nenhuma refeição!
+                            </EmptyListComponent>
+                        )}
+                        renderItem={({ item }) => (
+                            <Meal onPress={() => navigation.navigate('Details', { mealData: item })}>
+                                <MealHour>20:00</MealHour>
+                                <MealName>{item.name}</MealName>
+                                <MealStatus status={item.inDiet ? 'SUCCESS' : 'DANGER'} />
+                            </Meal>
+                        )}
+                        showsVerticalScrollIndicator={false}
+                        renderSectionHeader={({ section: { title } }) => <MealTitle>{title}</MealTitle>}
+                        contentContainerStyle={{ gap: 8, paddingBottom: 30 }}
+                    />
+                </MealsContainer>
+            </>
+        } 
         </Container>
     )
 }
